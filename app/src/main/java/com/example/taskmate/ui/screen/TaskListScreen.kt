@@ -1,9 +1,10 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.example.taskmate.ui
+package com.example.taskmate.ui.screen
 
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -24,11 +25,15 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.FabPosition
 import androidx.compose.ui.Alignment
 import com.example.taskmate.ui.theme.Black
+import com.example.taskmate.ui.theme.TaskMateTheme
 import com.example.taskmate.ui.theme.White
 
 
 @Composable
-fun TaskListScreen(modifier: Modifier) {
+fun TaskListScreen(
+    modifier: Modifier = Modifier,
+    onAddClick: () -> Unit
+) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -41,7 +46,8 @@ fun TaskListScreen(modifier: Modifier) {
             Box(
                 modifier = Modifier
                     .size(63.dp)
-                    .background(Black, CircleShape),
+                    .background(Black, CircleShape)
+                    .clickable { onAddClick() },
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
@@ -74,5 +80,10 @@ fun TaskListScreen(modifier: Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun PreviewTaskListScreen() {
-    TaskListScreen(modifier = Modifier)
+    TaskMateTheme {
+        TaskListScreen(
+            modifier = Modifier,
+            onAddClick = {}
+        )
+    }
 }

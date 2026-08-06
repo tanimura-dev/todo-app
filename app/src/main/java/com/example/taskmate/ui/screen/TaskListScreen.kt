@@ -6,6 +6,9 @@ package com.example.taskmate.ui.screen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -18,21 +21,36 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.DeleteForever
+import androidx.compose.material.icons.filled.Description
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.FabPosition
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextDecoration
 import com.example.taskmate.ui.theme.Black
-import com.example.taskmate.ui.theme.TaskMateTheme
 import com.example.taskmate.ui.theme.White
+import com.example.taskmate.viewmodel.TaskViewModel
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 
 
 @Composable
 fun TaskListScreen(
-    modifier: Modifier = Modifier,
-    onAddClick: () -> Unit
+    onAddClick: () -> Unit,
+    viewModel: TaskViewModel
 ) {
     Scaffold(
         topBar = {
@@ -64,12 +82,131 @@ fun TaskListScreen(
         LazyColumn(
             modifier = Modifier.padding(paddingValues)
         ) {
-          items(listOf("勉強","買い物","筋トレ")) { task ->
-              Text(
-                  text = task,
-                  modifier = Modifier.padding(16.dp)
-              )
-          }
+            items(viewModel.tasks) { task ->
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = White
+                    ),
+                    elevation = CardDefaults.cardElevation(
+                        defaultElevation = 4.dp
+                    )
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(12.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .weight(1f)
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Checkbox(
+                                    checked = task.isCompleted,
+                                    onCheckedChange = {
+                                        viewModel.toggleTask(task)
+                                    },
+                                )
+                                Text(
+                                    text = task.title,
+                                    style = MaterialTheme.typography.titleLarge.copy(
+                                        textDecoration = if (task.isCompleted) {
+                                            TextDecoration.LineThrough
+                                        } else null
+                                    ),
+                                    color = if (task.isCompleted) Color.Gray else Color.Black
+                                )
+                            }
+
+
+                            if (task.description.isNotBlank()) {
+                                Row(
+                                    modifier = Modifier
+                                        .padding(start = 8.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Description,
+                                        contentDescription = "詳細",
+                                        modifier = Modifier.size(16.dp)
+                                    )
+                                    Text(
+                                        text = task.description,
+                                        modifier = Modifier
+                                            .padding(start = 8.dp)
+                                    )
+                                }
+                            }
+                            if (task.deadline.isNotBlank()) {
+                                Row(
+                                    modifier = Modifier
+                                        .padding(start = 8.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.DateRange,
+                                        contentDescription = "日付選択",
+                                        modifier = Modifier.size(16.dp)
+                                    )
+                                    Text(
+                                        text = task.deadline,
+                                        modifier = Modifier
+                                            .padding(start = 8.dp),
+                                    )
+                                }
+                            }
+                        }
+
+                        var showDialog by remember { mutableStateOf(false) }
+
+                        IconButton(
+                            onClick = {
+                                showDialog = true
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.DeleteForever,
+                                contentDescription = "削除",
+                                modifier = Modifier.size(24.dp)
+                            )
+                        }
+                        if (showDialog) {
+                            AlertDialog(
+                                onDismissRequest = { showDialog = false },
+                                text = {
+                                    Text("本当に削除しますか？")
+                                },
+
+                                confirmButton = {
+                                    TextButton(
+                                        onClick = {
+                                            viewModel.deleteTask(task)
+                                            showDialog = false
+                                        }
+                                    ) {
+                                        Text("削除")
+                                    }
+                                },
+                                dismissButton = {
+                                    TextButton(
+                                        onClick = {
+                                            showDialog = false
+                                        }
+                                    ) {
+                                        Text("キャンセル")
+                                    }
+                                }
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
 }
@@ -77,13 +214,5 @@ fun TaskListScreen(
 
 
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewTaskListScreen() {
-    TaskMateTheme {
-        TaskListScreen(
-            modifier = Modifier,
-            onAddClick = {}
-        )
-    }
-}
+
+

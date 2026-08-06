@@ -16,7 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.taskmate.ui.theme.TaskMateTheme
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -26,11 +26,13 @@ import androidx.compose.ui.text.input.ImeAction
 import java.util.Locale
 import com.example.taskmate.ui.theme.Black
 import com.example.taskmate.ui.theme.White
+import com.example.taskmate.viewmodel.TaskViewModel
+import com.example.taskmate.data.model.Task
 
 @Composable
 fun AddTaskScreen(
-    modifier: Modifier = Modifier,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    viewModel: TaskViewModel
 ) {
 
     var title by remember { mutableStateOf("") }
@@ -49,11 +51,13 @@ fun AddTaskScreen(
                     IconButton(
                         onClick = { onBackClick() },
                         modifier = Modifier
-                            .padding(start = 8.dp, end = 16.dp)
+                            .padding(start = 10.dp, end = 16.dp)
+                            .padding(top = 3.dp)
                             .background(Black, CircleShape)
+                            .size(47.dp)
                     ) {
                         Icon(
-                            imageVector = Icons.Default.ArrowBack,
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "戻る",
                             tint = Color.White
                         )
@@ -130,7 +134,16 @@ fun AddTaskScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             Button(
-                onClick = { /* 後で処理 */ },
+                onClick = {
+                    viewModel.addTask(
+                        Task(
+                            title = title,
+                            description = description,
+                            deadline = deadline
+                        )
+                    )
+                    onBackClick()
+                          },
                 modifier = Modifier
                     .fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
@@ -180,10 +193,12 @@ fun AddTaskScreen(
 @Preview(showBackground = true)
 @Composable
 fun PreviewAddTaskScreen() {
+    val dummViewModel = remember { TaskViewModel() }
+
     TaskMateTheme {
         AddTaskScreen(
-            modifier = Modifier,
-            onBackClick = {}
+            onBackClick = {},
+            viewModel = dummViewModel
         )
     }
 }

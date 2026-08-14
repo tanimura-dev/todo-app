@@ -45,6 +45,7 @@ import com.example.taskmate.ui.theme.White
 import com.example.taskmate.viewmodel.TaskViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.collectAsState
 
 
 @Composable
@@ -52,6 +53,7 @@ fun TaskListScreen(
     onAddClick: () -> Unit,
     viewModel: TaskViewModel
 ) {
+    val tasks by viewModel.tasks.collectAsState()
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -82,7 +84,7 @@ fun TaskListScreen(
         LazyColumn(
             modifier = Modifier.padding(paddingValues)
         ) {
-            items(viewModel.tasks) { task ->
+            items(tasks) { task ->
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -210,9 +212,3 @@ fun TaskListScreen(
         }
     }
 }
-
-
-
-
-
-

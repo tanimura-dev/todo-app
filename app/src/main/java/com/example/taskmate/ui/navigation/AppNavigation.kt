@@ -22,7 +22,8 @@ fun ApplierNavigation(modifier: Modifier = Modifier) {
     val application = LocalContext.current.applicationContext as TaskApplication
     val viewModel: TaskViewModel = viewModel(
         factory = TaskViewModelFactory(
-            application.container.taskRepository
+            application.container.taskRepository,
+            application.container.quoteRepository
         )
     )
 

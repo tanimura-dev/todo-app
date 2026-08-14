@@ -35,6 +35,7 @@ import androidx.compose.material3.FabPosition
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextButton
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -54,6 +55,12 @@ fun TaskListScreen(
     viewModel: TaskViewModel
 ) {
     val tasks by viewModel.tasks.collectAsState()
+    val quote by viewModel.quote.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.loadQuote()
+    }
+
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -84,6 +91,35 @@ fun TaskListScreen(
         LazyColumn(
             modifier = Modifier.padding(paddingValues)
         ) {
+            item {
+                quote?.let {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                    ) {
+                        Text(
+                            text = "名言",
+                            style = MaterialTheme.typography.titleMedium
+                        )
+
+                        Text(
+                            text = "「${it.meigen}」",
+                            style = MaterialTheme.typography.bodyLarge,
+                            modifier = Modifier
+                                .padding(top = 6.dp)
+                        )
+
+                        Text(
+                            text = "${it.auther}",
+                            style = MaterialTheme.typography.bodyMedium,
+                            modifier = Modifier
+                                .padding(top = 3.dp)
+                        )
+                    }
+                }
+            }
+
             items(tasks) { task ->
                 Card(
                     modifier = Modifier

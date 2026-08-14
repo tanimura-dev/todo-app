@@ -12,9 +12,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.taskmate.ui.theme.TaskMateTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.DateRange
@@ -28,6 +26,7 @@ import com.example.taskmate.ui.theme.Black
 import com.example.taskmate.ui.theme.White
 import com.example.taskmate.viewmodel.TaskViewModel
 import com.example.taskmate.data.model.Task
+
 
 @Composable
 fun AddTaskScreen(
@@ -188,18 +187,4 @@ fun AddTaskScreen(
                 }
             }
         }
-
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewAddTaskScreen() {
-    val dummViewModel = remember { TaskViewModel() }
-
-    TaskMateTheme {
-        AddTaskScreen(
-            onBackClick = {},
-            viewModel = dummViewModel
-        )
-    }
-}
 

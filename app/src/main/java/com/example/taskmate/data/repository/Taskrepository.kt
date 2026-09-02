@@ -1,12 +1,9 @@
 package com.example.taskmate.data.repository
 
-import android.content.ClipData
 import com.example.taskmate.data.model.Task
 import kotlinx.coroutines.flow.Flow
 
-
 interface TaskRepository {
-
     fun getAllTasksStream(): Flow<List<Task>>
 
     fun getTaskStream(id: Int): Flow<Task?>

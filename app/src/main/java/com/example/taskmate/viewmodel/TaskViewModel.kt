@@ -6,23 +6,23 @@ import com.example.taskmate.data.model.Quote
 import com.example.taskmate.data.model.Task
 import com.example.taskmate.data.repository.QuoteRepository
 import com.example.taskmate.data.repository.TaskRepository
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.flow.MutableStateFlow
 
 class TaskViewModel(
     private val taskRepository: TaskRepository,
-    private val quoteRepository: QuoteRepository
+    private val quoteRepository: QuoteRepository,
 ) : ViewModel() {
-
     val tasks: StateFlow<List<Task>> =
-        taskRepository.getAllTasksStream()
+        taskRepository
+            .getAllTasksStream()
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5_000),
-                initialValue = emptyList()
+                initialValue = emptyList(),
             )
 
     private val _quote = MutableStateFlow<Quote?>(null)
@@ -42,9 +42,10 @@ class TaskViewModel(
 
     fun toggleTask(task: Task) {
         viewModelScope.launch {
-            val updatedTask = task.copy(
-                isCompleted = !task.isCompleted
-            )
+            val updatedTask =
+                task.copy(
+                    isCompleted = !task.isCompleted,
+                )
             taskRepository.updateTask(updatedTask)
         }
     }

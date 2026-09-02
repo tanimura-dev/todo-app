@@ -40,6 +40,21 @@ android {
     }
 }
 
+ktlint {
+    android.set(true)
+
+    additionalEditorconfig.set(
+        mapOf(
+            "ktlint_function_naming_ignore_when_annotated_with" to "Composable",
+        ),
+    )
+
+    filter {
+        exclude("**/generated/**")
+        exclude("**/build/**")
+    }
+}
+
 dependencies {
     implementation("androidx.compose.material:material-icons-extended")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")

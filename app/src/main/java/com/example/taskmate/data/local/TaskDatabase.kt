@@ -16,17 +16,17 @@ abstract class TaskDatabase : RoomDatabase() {
 
     companion object {
         @Volatile
-        private var Instance: TaskDatabase? = null
+        private var instance: TaskDatabase? = null
 
         fun getDatabase(context: Context): TaskDatabase =
-            Instance ?: synchronized(this) {
+            instance ?: synchronized(this) {
                 Room
                     .databaseBuilder(
                         context.applicationContext,
                         TaskDatabase::class.java,
                         "task_database",
                     ).build()
-                    .also { Instance = it }
+                    .also { instance = it }
             }
     }
 }

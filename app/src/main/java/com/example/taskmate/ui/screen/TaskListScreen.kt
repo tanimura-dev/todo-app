@@ -203,7 +203,7 @@ fun TaskListScreen(
                                     Icon(
                                         imageVector = Icons.Default.DateRange,
                                         contentDescription = "締め切り日",
-                                        modifier = Modifier.size(16.dp)
+                                        modifier = Modifier.size(16.dp),
                                     )
                                     Text(
                                         text = task.deadline,

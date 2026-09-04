@@ -14,7 +14,7 @@ import com.example.taskmate.viewmodel.TaskViewModel
 import com.example.taskmate.viewmodel.TaskViewModelFactory
 
 @Composable
-fun ApplierNavigation(modifier: Modifier = Modifier) {
+fun AppNavigation(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
     val application = LocalContext.current.applicationContext as TaskApplication
     val viewModel: TaskViewModel =

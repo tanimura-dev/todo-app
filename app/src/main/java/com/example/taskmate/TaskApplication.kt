@@ -5,7 +5,6 @@ import com.example.taskmate.data.AppContainer
 import com.example.taskmate.data.DefaultAppContainer
 
 class TaskApplication : Application() {
-
     lateinit var container: AppContainer
         private set
 
@@ -15,4 +14,3 @@ class TaskApplication : Application() {
         container = DefaultAppContainer(this)
     }
 }
-

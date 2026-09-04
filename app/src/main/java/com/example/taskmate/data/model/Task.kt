@@ -11,5 +11,5 @@ data class Task(
     val description: String,
     val deadline: String,
     val isCompleted: Boolean = false,
-    val createdAt: Long = System.currentTimeMillis()
+    val createdAt: Long = System.currentTimeMillis(),
 )

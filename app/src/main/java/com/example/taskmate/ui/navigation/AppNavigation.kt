@@ -1,6 +1,5 @@
 package com.example.taskmate.ui.navigation
 
-
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -14,30 +13,30 @@ import com.example.taskmate.ui.screen.TaskListScreen
 import com.example.taskmate.viewmodel.TaskViewModel
 import com.example.taskmate.viewmodel.TaskViewModelFactory
 
-
 @Composable
 fun ApplierNavigation(modifier: Modifier = Modifier) {
-
     val navController = rememberNavController()
     val application = LocalContext.current.applicationContext as TaskApplication
-    val viewModel: TaskViewModel = viewModel(
-        factory = TaskViewModelFactory(
-            application.container.taskRepository,
-            application.container.quoteRepository
+    val viewModel: TaskViewModel =
+        viewModel(
+            factory =
+                TaskViewModelFactory(
+                    application.container.taskRepository,
+                    application.container.quoteRepository,
+                ),
         )
-    )
 
     NavHost(
         navController = navController,
         startDestination = "taskList",
-        modifier = modifier
+        modifier = modifier,
     ) {
         composable("taskList") {
             TaskListScreen(
                 onAddClick = {
                     navController.navigate("addTask")
                 },
-                viewModel = viewModel
+                viewModel = viewModel,
             )
         }
         composable("addTask") {
@@ -45,9 +44,8 @@ fun ApplierNavigation(modifier: Modifier = Modifier) {
                 onBackClick = {
                     navController.popBackStack()
                 },
-                viewModel = viewModel
+                viewModel = viewModel,
             )
         }
     }
-
 }

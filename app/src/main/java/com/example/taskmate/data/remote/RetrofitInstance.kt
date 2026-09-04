@@ -8,12 +8,15 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 object RetrofitInstance {
     private const val BASE_URL = "https://meigen.doodlenote.net/"
 
-    private val moshi = Moshi.Builder()
-        .addLast(KotlinJsonAdapterFactory())
-        .build()
+    private val moshi =
+        Moshi
+            .Builder()
+            .addLast(KotlinJsonAdapterFactory())
+            .build()
 
     val api: QuoteApiService by lazy {
-        Retrofit.Builder()
+        Retrofit
+            .Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()

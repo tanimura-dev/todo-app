@@ -78,7 +78,7 @@ fun TaskListScreen(
             ) {
                 Icon(
                     imageVector = Icons.Default.Add,
-                    contentDescription = null,
+                    contentDescription = "タスクを追加",
                     tint = White,
                     modifier = Modifier.size(28.dp),
                 )
@@ -202,8 +202,8 @@ fun TaskListScreen(
                                 ) {
                                     Icon(
                                         imageVector = Icons.Default.DateRange,
-                                        contentDescription = "日付選択",
-                                        modifier = Modifier.size(16.dp),
+                                        contentDescription = "締め切り日",
+                                        modifier = Modifier.size(16.dp)
                                     )
                                     Text(
                                         text = task.deadline,

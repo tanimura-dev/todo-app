@@ -1,4 +1,3 @@
-
 @file:OptIn(ExperimentalMaterial3Api::class)
 
 package com.example.taskmate.ui.screen
@@ -56,6 +55,7 @@ fun AddTaskScreen(
     var description by remember { mutableStateOf("") }
     var deadline by remember { mutableStateOf("") }
     var showDatePicker by remember { mutableStateOf(false) }
+    var titleError by remember { mutableStateOf(false) }
     val datePickerState = rememberDatePickerState()
     val keyboardController = LocalSoftwareKeyboardController.current
     val descriptionFocusRequester = remember { FocusRequester() }
@@ -96,8 +96,19 @@ fun AddTaskScreen(
             Spacer(modifier = Modifier.height(4.dp))
             OutlinedTextField(
                 value = title,
-                onValueChange = { title = it },
+                onValueChange = {
+                    title = it
+                    if (titleError) {
+                        titleError = false
+                    }
+                },
                 modifier = Modifier.fillMaxWidth(),
+                isError = titleError,
+                supportingText = {
+                    if (titleError) {
+                        Text("タイトルを入力してください")
+                    }
+                },
                 keyboardOptions =
                     KeyboardOptions(
                         imeAction = ImeAction.Next,
@@ -158,14 +169,18 @@ fun AddTaskScreen(
 
             Button(
                 onClick = {
-                    viewModel.addTask(
-                        Task(
-                            title = title,
-                            description = description,
-                            deadline = deadline,
-                        ),
-                    )
-                    onBackClick()
+                    if (title.isBlank()) {
+                        titleError = true
+                    } else {
+                        viewModel.addTask(
+                            Task(
+                                title = title.trim(),
+                                description = description.trim(),
+                                deadline = deadline,
+                            ),
+                        )
+                        onBackClick()
+                    }
                 },
                 modifier =
                     Modifier

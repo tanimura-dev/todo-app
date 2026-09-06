@@ -54,6 +54,7 @@
 
 * Retrofitを使用してAPIから名言を取得する
 * 取得した名言を画面に表示する
+* タスク一覧画面を表示するたびに名言を再取得する（他画面から戻った際も新しい名言に切り替わる）
 
 ---
 
@@ -90,27 +91,28 @@
 ### ① Task（タスク管理）
 
 ```kotlin
-@Entity(tableName = "tasks")
+@Entity
 data class Task(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-
     val title: String,
-    val description: String = "",
-    val deadline: String? = null,
-    val isDone: Boolean = false
+    val description: String,
+    val deadline: String,
+    val isCompleted: Boolean = false,
+    val createdAt: Long = System.currentTimeMillis(),
 )
 ```
 
 #### 項目
 
-| 項目          | 説明       |
-| ----------- | -------- |
-| id          | タスク識別用ID |
-| title       | タスクタイトル  |
-| description | タスク詳細    |
-| deadline    | 締め切り日    |
-| isDone      | 完了状態     |
+| 項目          | 説明              |
+|-------------|-----------------|
+| id          | タスク識別用ID        |
+| title       | タスクタイトル         |
+| description | タスク詳細           |
+| deadline    | 締め切り日（未設定は空文字）  |
+| isCompleted | 完了状態            |
+| createdAt   | 作成日時（一覧の並び順に使用） |
 
 ---
 
@@ -118,17 +120,17 @@ data class Task(
 
 ```kotlin
 data class Quote(
-    val content: String,
-    val author: String? = null
+    val meigen: String,
+    val auther: String,
 )
 ```
 
 #### 項目
 
-| 項目      | 説明   |
-| ------- | ---- |
-| content | 名言内容 |
-| author  | 発言者  |
+| 項目      | 説明                      |
+|---------|-------------------------|
+| meigen  | 名言内容（API のレスポンスキーに準拠）   |
+| auther  | 発言者（API 側のスペルミスをそのまま採用） |
 
 ---
 
@@ -146,7 +148,7 @@ data class Quote(
 
 ## 非機能要件
 
-* Android 8.0（API 26）以上対応
+* Android 7.0（API 24）以上対応
 * 高速で安定した動作
 * シンプルで操作しやすいUI
 
@@ -198,5 +200,8 @@ data class Quote(
 * 各機能の動作確認を行う
 * 問題箇所を修正する
 
+---
 
+## 更新履歴
 
+* 2026/09/06：実装に合わせて設計書を更新

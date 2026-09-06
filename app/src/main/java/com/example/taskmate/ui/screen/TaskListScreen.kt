@@ -122,7 +122,7 @@ fun TaskListScreen(
                 }
             }
 
-            items(tasks) { task ->
+            items(tasks, key = { it.id }) { task ->
                 Card(
                     modifier =
                         Modifier

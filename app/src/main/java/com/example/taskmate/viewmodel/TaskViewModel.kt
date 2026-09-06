@@ -30,7 +30,12 @@ class TaskViewModel(
 
     fun loadQuote() {
         viewModelScope.launch {
-            _quote.value = quoteRepository.getQuote()
+            _quote.value =
+                try {
+                    quoteRepository.getQuote()
+                } catch (e: Exception) {
+                    null
+                }
         }
     }
 

@@ -2,6 +2,8 @@ package com.example.taskmate.data
 
 import android.content.Context
 import com.example.taskmate.data.local.TaskDatabase
+import com.example.taskmate.data.remote.RetrofitInstance
+import com.example.taskmate.data.repository.NetworkQuoteRepository
 import com.example.taskmate.data.repository.OfflineTaskRepository
 import com.example.taskmate.data.repository.QuoteRepository
 import com.example.taskmate.data.repository.TaskRepository
@@ -23,6 +25,6 @@ class DefaultAppContainer(
     }
 
     override val quoteRepository: QuoteRepository by lazy {
-        QuoteRepository()
+        NetworkQuoteRepository(RetrofitInstance.api)
     }
 }

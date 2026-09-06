@@ -1,8 +1,14 @@
 package com.example.taskmate.data.repository
 
 import com.example.taskmate.data.model.Quote
-import com.example.taskmate.data.remote.RetrofitInstance
+import com.example.taskmate.data.remote.QuoteApiService
 
-class QuoteRepository {
-    suspend fun getQuote(): Quote = RetrofitInstance.api.getQuote().first()
+interface QuoteRepository {
+    suspend fun getQuote(): Quote?
+}
+
+class NetworkQuoteRepository(
+    private val api: QuoteApiService,
+) : QuoteRepository {
+    override suspend fun getQuote(): Quote? = api.getQuote().firstOrNull()
 }
